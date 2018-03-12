@@ -26,6 +26,7 @@ public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FragmentManager fragmentManager;
+
     private Posto posto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +109,8 @@ public class PrincipalActivity extends AppCompatActivity
         if (id == R.id.nav_principal) {//Depois criar funcoes para fazer isso
             FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-            transaction.add(R.id.containerId, new MapsFragment(), "MapsFragment");
-
-            transaction.commitAllowingStateLoss();
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivity(intent);
         }
 
         if (id == R.id.novoPostoId) {

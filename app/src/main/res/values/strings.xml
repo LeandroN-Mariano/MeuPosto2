@@ -34,12 +34,27 @@
     <string name="endere_posto">Endereço</string>
     <string name="nome_posto">Nome</string>
     <string name="lista_bandeiras">Dismiss</string>
-    <string name="selecione_a_bandeira">Selecione a bandeira</string>
+    <string name="selecione_a_bandeira"></string>
     <string name="tipo_combustivel">Escolha o tipo de combustivel</string>
     <string name="android_studio">Android Studio</string>
     <string name="android_studio_android_com">android.studio@android.com</string>
     <string name="localizar_postos">Localizar postos</string>
     <string name="novo_posto2">Novo posto</string>
     <string name="postos_cadastrados">Postos cadastrados</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Senha </string>
+    <string name="action_sign_in">Entrar  ou cadastrar</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">Este email é inválido!</string>
+    <string name="error_invalid_password">Esta senha é muito pequena</string>
+    <string name="error_incorrect_password">Senha errada</string>
+    <string name="error_field_required">Este campo é obrigatório</string>
+    <string name="permission_rationale">Permissão de contatos  é necessária para ter acesso ao email do seu celular."
+    </string>
+    <string name="novo_aqui_realize_seu_cadastro">Novo aqui? realize seu cadastro!</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package meuposto.br.com.projeto.meuposto;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Criteria;
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -67,29 +69,20 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        try {
 
+        mMap = googleMap;
 
-            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        LatLng serraTalhada = new LatLng(-8.065638,-34.89);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(serraTalhada));
+        mMap.addMarker(new MarkerOptions().position(serraTalhada)).setTitle("Meu local");
 
-            Criteria criteria = new Criteria();
+        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(serraTalhada).build();
 
-            String provider = locationManager.getBestProvider(criteria, true);
-            Toast.makeText(getActivity(), "Provider: " + provider, Toast.LENGTH_LONG).show();
-            mMap = googleMap;
-
-            mMap.setOnMapClickListener(this);
-
-            mMap.setMyLocationEnabled(true);
-
-            mMap.setMinZoomPreference(14.0f);
-            mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
 
 
-        } catch (SecurityException e) {
-            Log.e(TAG, "Erro: ", e);
-        }
+
 
 
 
@@ -114,6 +107,8 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
     @Override
     public void onLocationChanged(Location location) {
+
+
         Toast.makeText(getActivity(), "Posição alterada!", Toast.LENGTH_LONG).show();
 
         // Coordenada para a localizacao do GPS
@@ -125,12 +120,12 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
         //Isso faz con que a cada atualizacao adiciona o marcador, vai ficar adicionando varios
         //Pois a localizacao smepre se altera
-       /* MarkerOptions marker = new MarkerOptions();
+      MarkerOptions marker = new MarkerOptions();
         marker.position(novaLocalizacao);
         marker.title("Nova localizacao");
 
         mMap.addMarker(marker);
-       */
+
     }
 
     @Override

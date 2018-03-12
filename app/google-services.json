@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "694394181772",
-    "firebase_url": "https://fir-46dad.firebaseio.com",
-    "project_id": "fir-46dad",
-    "storage_bucket": "fir-46dad.appspot.com"
+    "project_number": "826485927462",
+    "firebase_url": "https://postobd-2c32b.firebaseio.com",
+    "project_id": "postobd-2c32b",
+    "storage_bucket": "postobd-2c32b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:694394181772:android:44ff2231bf5d5c53",
+        "mobilesdk_app_id": "1:826485927462:android:44ff2231bf5d5c53",
         "android_client_info": {
           "package_name": "meuposto.br.com.projeto.meuposto"
         }
       },
       "oauth_client": [
         {
-          "client_id": "694394181772-udnmbiupjjc298nkirs76of75bh7drd8.apps.googleusercontent.com",
+          "client_id": "826485927462-eishu8ri5q0hj7q0e54t7ff5gjqpidn7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "meuposto.br.com.projeto.meuposto",
-            "certificate_hash": "5f577e9626df4341682e655e1b4801e2c3673616"
+            "certificate_hash": "efb555b81e9c1a4103597b90ce113287c69aac5b"
           }
         },
         {
-          "client_id": "694394181772-r6mki38tghvkkubi2a22s36hemiafebp.apps.googleusercontent.com",
+          "client_id": "826485927462-h6pgtq8f4365anlnpcslmngth3hgg7bg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC_iiza9lHIq2xlV_0CVKw2pG_LoV8-zKY"
+          "current_key": "AIzaSyAQk7Cld04s-suNRQe_nPZwlLu8YY4WOZU"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "694394181772-r6mki38tghvkkubi2a22s36hemiafebp.apps.googleusercontent.com",
+              "client_id": "826485927462-h6pgtq8f4365anlnpcslmngth3hgg7bg.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

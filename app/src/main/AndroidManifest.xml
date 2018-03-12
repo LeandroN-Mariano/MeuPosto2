@@ -18,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MapsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,12 +41,20 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <!--
+               <activity
+                   android:name=".MapsFragment"
+                   android:label="@string/title_activity_mapa" />
 
-        <activity
-            android:name=".MapsFragment"
-            android:label="@string/title_activity_mapa" />
-        <activity android:name=".CadastroPostoActivity" />
-        <activity android:name=".ListaPostosActivity"></activity>
-    </application>
+                    -->
+               <activity android:name=".CadastroPostoActivity" />
+               <activity android:name=".ListaPostosActivity" />
 
-</manifest>
+        <!--
+               <activity
+
+                   android:name=".MapsActivity"
+                   android:label="@string/title_activity_maps"></activity> -->
+           </application>
+
+       </manifest>
