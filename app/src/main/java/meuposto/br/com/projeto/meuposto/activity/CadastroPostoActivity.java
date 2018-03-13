@@ -1,4 +1,4 @@
-package meuposto.br.com.projeto.meuposto;
+package meuposto.br.com.projeto.meuposto.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,10 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import meuposto.br.com.projeto.meuposto.Control.DAOException;
+import meuposto.br.com.projeto.meuposto.R;
 import meuposto.br.com.projeto.meuposto.dao.CombustivelDAO;
 import meuposto.br.com.projeto.meuposto.dao.PostoDAO;
 import meuposto.br.com.projeto.meuposto.model.Combustivel;
@@ -30,9 +34,11 @@ public class CadastroPostoActivity extends AppCompatActivity {
     private TextView bandeira;
     private Button btCadastrar;
     private Context context;
-
+    Posto posto;
     private AlertDialog alerta;
 
+    DatabaseReference referenciaFirebase;
+    FirebaseAuth autenticacao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +76,7 @@ public class CadastroPostoActivity extends AppCompatActivity {
                 || bandeira.getText().toString().equals("") ) {
             Util.exibirmensagem(this, "Digite todos os dados do Posto!");
         } else {
-            Posto posto = new Posto();
+            posto = new Posto();
             posto.setNome(nome.getText().toString());
             posto.setEndereco(endereco.getText().toString());
             posto.setBandeira(bandeira.getText().toString());
@@ -106,8 +112,10 @@ public class CadastroPostoActivity extends AppCompatActivity {
            // posto.setCombustivel(combustivels);
 
 
-            posto.setSincronizado(true);
 
+
+
+            posto.salvar();
 
             PostoDAO postoDAO = new PostoDAO(this);
             postoDAO.insert(posto);

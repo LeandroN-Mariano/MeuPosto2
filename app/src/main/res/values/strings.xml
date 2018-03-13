@@ -46,7 +46,8 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Senha </string>
-    <string name="action_sign_in">Entrar  ou cadastrar</string>
+    <string name="action_sign_in">Entrar</string>
+    <string name="action_sair">Sair</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">Este email é inválido!</string>
     <string name="error_invalid_password">Esta senha é muito pequena</string>
@@ -56,5 +57,12 @@
     </string>
     <string name="novo_aqui_realize_seu_cadastro">Novo aqui? realize seu cadastro!</string>
     <string name="title_activity_maps">Map</string>
+    <string name="novo_por_aqui_realize_seu_cadastro">Novo por aqui? Realize seu cadastro.</string>
+    <string name="digite_a_bandeira">Escolha a bandeira</string>
+    <string name="digite_o_endereco">Digite o endereco</string>
+    <string name="digite_o_nome">Digite o nome</string>
+    <string name="localiza_o">Localização</string>
+    <string name="pre_os">Preços</string>
+    <string name="nomePos">Nome</string>
 
 </resources>

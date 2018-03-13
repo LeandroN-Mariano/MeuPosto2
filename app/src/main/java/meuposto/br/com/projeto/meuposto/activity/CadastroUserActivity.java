@@ -1,10 +1,12 @@
-package meuposto.br.com.projeto.meuposto;
+package meuposto.br.com.projeto.meuposto.activity;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,10 +14,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 
 import meuposto.br.com.projeto.meuposto.Control.DAOException;
-import meuposto.br.com.projeto.meuposto.dao.UserDao;
+import meuposto.br.com.projeto.meuposto.R;
+import meuposto.br.com.projeto.meuposto.config.ConfiguracaoFireBase;
 import meuposto.br.com.projeto.meuposto.model.User;
 import meuposto.br.com.projeto.meuposto.util.Util;
 
@@ -29,6 +42,9 @@ public class CadastroUserActivity extends Activity {
     private Button btCadastrar;
     private AlertDialog alerta;
     private Context context;
+    private User usuario;
+    DatabaseReference referenciaFirebase;
+    FirebaseAuth autenticacao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,27 +90,70 @@ public class CadastroUserActivity extends Activity {
                 || senha.getText().toString().equals("") || veiculo.getText().toString().equals("") || combustivel.getText().toString().equals("")) {
             Util.exibirmensagem(this, "Digite os dados do usuário!");
         } else {
-            User user = new User();
-            user.setEmail(email.getText().toString());
-            user.setNome(nome.getText().toString());
-            user.setPassword(senha.getText().toString());
-            user.setVeiculo(veiculo.getText().toString());
-            user.setCombustivel(combustivel.getText().toString());
+            usuario = new User();
+            usuario.setEmail(email.getText().toString());
+            usuario.setNome(nome.getText().toString());
+            usuario.setPassword(senha.getText().toString());
+            usuario.setVeiculo(veiculo.getText().toString());
+            usuario.setCombustivel(combustivel.getText().toString());
 
-            user.setSincronizado(true);
+            usuario.setSincronizado(true);
 
 
-            UserDao dao = new UserDao(this);
-            dao.insert(user);
-            Util.exibirmensagem(this, "Dados salvos com sucesso!");
+            cadastrarFibase();
 
-            //Limpar campos
-            nome.setText("");
-            email.setText("");
-            senha.setText("");
-            veiculo.setText("");
-            combustivel.setText("");
+
         }
+    }
+//Usando Firebase
+    public void cadastrarFibase(){
+
+        autenticacao = ConfiguracaoFireBase.getFirebaseAutentica();
+
+        autenticacao.createUserWithEmailAndPassword(
+        usuario.getEmail(),usuario.getPassword()
+        ).addOnCompleteListener(CadastroUserActivity.this, new OnCompleteListener<AuthResult>() {
+            @Override
+
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(CadastroUserActivity.this, "Usuário cadastrado com sucesso!", Toast.LENGTH_LONG).show();
+
+                    FirebaseUser firebaseUser = task.getResult().getUser();
+                    usuario.setId(firebaseUser.getUid());
+
+                    //Salvando do Bd fireBase
+                    usuario.salvar();
+
+                    //Limpar campos
+                    nome.setText("");
+                    email.setText("");
+                    senha.setText("");
+                    veiculo.setText("");
+                    combustivel.setText("");
+
+                    autenticacao.signOut();
+                    finish();
+                }else{
+                    String erroExcecao = "";
+                    try {
+                        throw task.getException();
+                    } catch (FirebaseAuthWeakPasswordException e) {
+                        erroExcecao = "Digite uma senha mais forte (Mínimo 6 caracteres)!";
+                    } catch (FirebaseAuthInvalidCredentialsException e) {
+                        erroExcecao = "O email digitado é inválido!";
+                    } catch (FirebaseAuthUserCollisionException e) {
+                        erroExcecao = "Email já cadastrado!";
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        erroExcecao = "Ao cadastrar usuário!";
+                    }
+
+                    Toast.makeText(CadastroUserActivity.this, "Erro: " + erroExcecao, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
     }
 
     private void listaBandeiras() throws DAOException {

@@ -1,4 +1,4 @@
-package meuposto.br.com.projeto.meuposto;
+package meuposto.br.com.projeto.meuposto.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,6 +34,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+
+import meuposto.br.com.projeto.meuposto.LocationData;
+import meuposto.br.com.projeto.meuposto.R;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener{
 

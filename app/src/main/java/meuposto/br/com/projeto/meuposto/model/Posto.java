@@ -1,6 +1,12 @@
 package meuposto.br.com.projeto.meuposto.model;
 
+import com.google.firebase.database.DatabaseReference;
+
+import java.util.Date;
 import java.util.List;
+
+import meuposto.br.com.projeto.meuposto.LocationData;
+import meuposto.br.com.projeto.meuposto.config.ConfiguracaoFireBase;
 
 /**
  * Created by leo_3 on 12/02/2018.
@@ -8,23 +14,32 @@ import java.util.List;
 
 public class Posto {
 
-    private int id;
+    private String id;
     private String nome;
     private String endereco;
     private String bandeira;
     private List<Combustivel> combustivel;
-    private boolean sincronizado;
-    private int id_combustivel;
+    private String latidude;
+    private String longidude;
 
     public Posto() {
     }
 
-    public Posto(String nome, String endereco, String bandeira) {
+    public Posto(String id, String nome, String endereco, String bandeira, List<Combustivel> combustivel, String latidude, String longidude) {
+        this.id = id;
         this.nome = nome;
         this.endereco = endereco;
         this.bandeira = bandeira;
+        this.combustivel = combustivel;
+        this.latidude = latidude;
+        this.longidude = longidude;
     }
 
+    public void salvar(){
+
+        DatabaseReference referenciaFirebase = ConfiguracaoFireBase.getFirebase();
+        referenciaFirebase.child("postos").child(String.valueOf(new Date().getTime())).setValue(this);
+    }
     public String getNome() {
         return nome;
     }
@@ -49,11 +64,11 @@ public class Posto {
         this.bandeira = bandeira;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -65,19 +80,19 @@ public class Posto {
         this.combustivel = combustivel;
     }
 
-    public boolean isSincronizado() {
-        return sincronizado;
+    public String getLatidude() {
+        return latidude;
     }
 
-    public void setSincronizado(boolean sincronizado) {
-        this.sincronizado = sincronizado;
+    public void setLatidude(String latidude) {
+        this.latidude = latidude;
     }
 
-    public int getId_combustivel() {
-        return id_combustivel;
+    public String getLongidude() {
+        return longidude;
     }
 
-    public void setId_combustivel(int id_combustivel) {
-        this.id_combustivel = id_combustivel;
+    public void setLongidude(String longidude) {
+        this.longidude = longidude;
     }
 }

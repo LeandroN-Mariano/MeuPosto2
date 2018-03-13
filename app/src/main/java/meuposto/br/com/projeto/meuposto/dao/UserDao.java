@@ -86,7 +86,7 @@ public class UserDao extends DAO<User>{
                 System.out.println(cursor.getLong(1));
                 System.out.println("-----------");
 
-                user.setId(cursor.getInt(cursor.getColumnIndex("id")));
+              //  user.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 user.setNome(cursor.getString(cursor.getColumnIndex("nome")));
                 user.setEmail(cursor.getString(cursor.getColumnIndex("email")));
                 user.setPassword(cursor.getString(cursor.getColumnIndex("password")));

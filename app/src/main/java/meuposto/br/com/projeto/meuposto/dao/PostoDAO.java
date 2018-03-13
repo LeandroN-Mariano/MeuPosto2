@@ -37,7 +37,7 @@ try {
     values.put("nome", obj.getNome());
     values.put("endereco", obj.getEndereco());
     values.put("bandeira", obj.getBandeira());
-    values.put("id_combustivel", obj.getId_combustivel());
+
 
     System.out.println("Posto: " + db.insert("posto",null,values));
 

@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="meuposto.br.com.projeto.meuposto.LoginActivity">
+    tools:context="meuposto.br.com.projeto.meuposto.activity.LoginActivity">
 
     <!-- Login progress -->
     <ProgressBar
@@ -69,6 +69,12 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cadastroNovoIdUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/novo_por_aqui_realize_seu_cadastro" />
 
         </LinearLayout>
     </ScrollView>

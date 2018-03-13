@@ -1,4 +1,4 @@
-package meuposto.br.com.projeto.meuposto;
+package meuposto.br.com.projeto.meuposto.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import meuposto.br.com.projeto.meuposto.R;
 import meuposto.br.com.projeto.meuposto.dao.UserDao;
 import meuposto.br.com.projeto.meuposto.model.User;
 import meuposto.br.com.projeto.meuposto.util.Util;
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(Util.getUsuarioLogado().getEmail());
             System.out.println(Util.getUsuarioLogado().getId());
             System.out.println(Util.getUsuarioLogado().getNome());
+
+
             startActivity(new Intent(this, PrincipalActivity.class));
 
         //Se nada for digitado

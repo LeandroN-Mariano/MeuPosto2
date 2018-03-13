@@ -1,4 +1,4 @@
-package meuposto.br.com.projeto.meuposto;
+package meuposto.br.com.projeto.meuposto.activity;
 
 import android.app.Activity;
 import android.content.Context;

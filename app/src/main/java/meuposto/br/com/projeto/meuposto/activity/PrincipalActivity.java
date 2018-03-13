@@ -1,4 +1,4 @@
-package meuposto.br.com.projeto.meuposto;
+package meuposto.br.com.projeto.meuposto.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,23 +10,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import meuposto.br.com.projeto.meuposto.R;
+import meuposto.br.com.projeto.meuposto.config.ConfiguracaoFireBase;
 import meuposto.br.com.projeto.meuposto.model.Combustivel;
 import meuposto.br.com.projeto.meuposto.model.Posto;
-
-import static android.content.ContentValues.TAG;
 
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FragmentManager fragmentManager;
-
+    //Variaveis do FireBase
+    private FirebaseAuth firebaseAuth;
     private Posto posto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,10 @@ public class PrincipalActivity extends AppCompatActivity
             return true;
         }
 
+        if(id == R.id.iten_sair){
+          logOut();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -134,5 +141,14 @@ public class PrincipalActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void logOut(){
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        firebaseAuth.signOut();
+        Intent MainIntent = new Intent(PrincipalActivity.this, LoginActivity.class);
+        startActivity(MainIntent);
     }
 }

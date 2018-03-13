@@ -1,11 +1,16 @@
 package meuposto.br.com.projeto.meuposto.model;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+
+import meuposto.br.com.projeto.meuposto.config.ConfiguracaoFireBase;
+
 /**
  * Created by leandro on 29/01/18.
  */
 
 public class User  {
-    private int id;
+    private String id;
     private String email;
     private String nome;
     private String password;
@@ -27,7 +32,7 @@ public class User  {
         this.sincronizado = false;
     }
 
-    public User(int id, String email, String nome, String password, String veiculo,String combustivel) {
+    public User(String id, String email, String nome, String password, String veiculo,String combustivel) {
         this.id = id;
         this.email = email;
         this.nome = nome;
@@ -37,6 +42,13 @@ public class User  {
         this.sincronizado = false;
     }
 
+    public void salvar(){
+
+        DatabaseReference referenciaFirebase = ConfiguracaoFireBase.getFirebase();
+        referenciaFirebase.child("usuarios").child(getId()).setValue(this);
+    }
+
+    @Exclude
     public String getPassword() {
         return password;
     }
@@ -53,11 +65,12 @@ public class User  {
         this.sincronizado = sincronizado;
     }
 
-    public int getId() {
+    @Exclude
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
