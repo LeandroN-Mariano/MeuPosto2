@@ -129,7 +129,7 @@ public class PrincipalActivity extends AppCompatActivity
 
         }
 
-        if (id == R.id.listaPostosId) {
+        if (id == R.id.listaDePostosID) {
 
 
     Intent intent = new Intent(this, ListaPostosActivity.class);

@@ -1,5 +1,6 @@
 package meuposto.br.com.projeto.meuposto.model;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.Date;
@@ -37,8 +38,9 @@ public class Posto {
 
     public void salvar(){
 
+        FirebaseAuth firebaseAuth = ConfiguracaoFireBase.getFirebaseAutentica();
         DatabaseReference referenciaFirebase = ConfiguracaoFireBase.getFirebase();
-        referenciaFirebase.child("postos").child(String.valueOf(new Date().getTime())).setValue(this);
+        referenciaFirebase.child("postos").child(firebaseAuth.getCurrentUser().getUid()).setValue(this);
     }
     public String getNome() {
         return nome;

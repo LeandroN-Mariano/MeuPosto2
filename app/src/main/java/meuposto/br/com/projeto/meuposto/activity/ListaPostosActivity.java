@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -30,24 +31,28 @@ public class ListaPostosActivity extends AppCompatActivity {
 
     PostoDAO postoDAO;
     Context context;
-    ListView lisViewPosto;
 
+
+    //Lista do posto
     EditText nomePostEdit;
     List<Posto> listaPosto = new ArrayList<Posto>();
     ArrayAdapter<Posto> postoArrayAdapter;
 
-    DatabaseReference referenciaFirebase;
+    //Teste Lista
+    private  ListView lisViewPosto;;
+    private ArrayList<String> postos;
+    private ArrayAdapter adapter;
+
+    private ValueEventListener valueEventListenerMensagem;
+    DatabaseReference firebase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_postos);
 
         lisViewPosto = (ListView) findViewById(R.id.listaPostosId);
-        nomePostEdit = (EditText) findViewById(R.id.nomePostoEdit);
-        ListaPostos(nomePostEdit.getText().toString());
-        Intent i = getIntent();
-        String nome = i.getStringExtra("Posto");
-        Util.addNomeNaLista(nome);
+
+      //  ListaPostos(nomePostEdit.getText().toString());
 
         postoDAO = new PostoDAO(context);
 
@@ -98,12 +103,13 @@ public class ListaPostosActivity extends AppCompatActivity {
     }
     public void ListaPostos(String palavra){
 
+        /*
         Query query;
 
         if(palavra.equals("")) {
-            query = referenciaFirebase.child("postos").orderByChild("nome");
+            query = referenciaFirebase.child("location");
         }else{
-            query = referenciaFirebase.child("postos").orderByChild("nome").startAt(palavra).endAt(palavra+"uft8");
+            query = referenciaFirebase.child("location");
         }
 
 
@@ -130,6 +136,53 @@ public class ListaPostosActivity extends AppCompatActivity {
 
             }
         });
+*/
+
+
+        // Monta listview e adapter
+        postos = new ArrayList<>();
+
+        adapter = new ArrayAdapter(
+                ListaPostosActivity.this,
+                android.R.layout.simple_list_item_1,
+                postos);
+
+        lisViewPosto.setAdapter(adapter);
+
+
+        // Recuperar mensagens do Firebase
+        firebase = ConfiguracaoFireBase.getFirebase()
+                .child("postos");
+
+        // Cria listener para mensagens
+        valueEventListenerMensagem = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                // Limpar mensagens
+                postos.clear();
+
+                // Recupera mensagens
+                for ( DataSnapshot dados: dataSnapshot.getChildren() ){
+                    Posto posto = dados.getValue( Posto.class );
+                    postos.add( posto.getNome() );
+                    Log.i("Nome posto: ",posto.getNome());
+                    System.out.println("Posoro===> :"+ posto.getNome());
+                }
+
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        firebase.addValueEventListener( valueEventListenerMensagem );
+
+
 
     }
 
