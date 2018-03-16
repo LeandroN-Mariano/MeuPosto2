@@ -3,6 +3,7 @@ package meuposto.br.com.projeto.meuposto.model;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,14 +20,16 @@ public class Posto {
     private String nome;
     private String endereco;
     private String bandeira;
-    private List<Combustivel> combustivel;
+    private ArrayList<Combustivel> combustivel;
+
     private String latidude;
     private String longidude;
+
 
     public Posto() {
     }
 
-    public Posto(String id, String nome, String endereco, String bandeira, List<Combustivel> combustivel, String latidude, String longidude) {
+    public Posto(String id, String nome, String endereco, String bandeira, ArrayList<Combustivel> combustivel, String latidude, String longidude) {
         this.id = id;
         this.nome = nome;
         this.endereco = endereco;
@@ -78,9 +81,11 @@ public class Posto {
         return combustivel;
     }
 
-    public void setCombustivel(List<Combustivel> combustivel) {
+    public void setCombustivel(ArrayList<Combustivel> combustivel) {
         this.combustivel = combustivel;
     }
+
+
 
     public String getLatidude() {
         return latidude;

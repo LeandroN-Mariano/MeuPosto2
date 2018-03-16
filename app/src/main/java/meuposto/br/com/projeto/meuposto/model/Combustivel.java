@@ -1,22 +1,42 @@
 package meuposto.br.com.projeto.meuposto.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by leo_3 on 12/02/2018.
  */
 
-public class Combustivel {
-    private int id;
+public class Combustivel implements Parcelable {
+
     private String tipo;
-    private double preco;
-    private boolean sincronizado;
+    private String preco;
+
+
+    public Combustivel(String tipo, String preco) {
+        this.tipo = tipo;
+        this.preco = preco;
+    }
 
     public Combustivel() {
     }
 
-    public Combustivel(String tipo, double preco) {
-        this.tipo = tipo;
-        this.preco = preco;
+    protected Combustivel(Parcel in) {
+        tipo = in.readString();
+        preco = in.readString();
     }
+
+    public static final Creator<Combustivel> CREATOR = new Creator<Combustivel>() {
+        @Override
+        public Combustivel createFromParcel(Parcel in) {
+            return new Combustivel(in);
+        }
+
+        @Override
+        public Combustivel[] newArray(int size) {
+            return new Combustivel[size];
+        }
+    };
 
     public String getTipo() {
         return tipo;
@@ -26,27 +46,23 @@ public class Combustivel {
         this.tipo = tipo;
     }
 
-    public double getPreco() {
+    public String getPreco() {
         return preco;
     }
 
-    public void setPreco(double preco) {
+    public void setPreco(String preco) {
         this.preco = preco;
     }
 
-    public int getId() {
-        return id;
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public boolean isSincronizado() {
-        return sincronizado;
-    }
-
-    public void setSincronizado(boolean sincronizado) {
-        this.sincronizado = sincronizado;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(tipo);
+        dest.writeString(preco);
     }
 }

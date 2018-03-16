@@ -2,6 +2,7 @@ package meuposto.br.com.projeto.meuposto.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,12 +19,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import meuposto.br.com.projeto.meuposto.Control.DAOException;
 import meuposto.br.com.projeto.meuposto.R;
+import meuposto.br.com.projeto.meuposto.config.ConfiguracaoFireBase;
 import meuposto.br.com.projeto.meuposto.dao.CombustivelDAO;
-import meuposto.br.com.projeto.meuposto.dao.PostoDAO;
 import meuposto.br.com.projeto.meuposto.model.Combustivel;
 import meuposto.br.com.projeto.meuposto.model.Posto;
 import meuposto.br.com.projeto.meuposto.util.Util;
@@ -34,8 +35,13 @@ public class CadastroPostoActivity extends AppCompatActivity {
     private TextView bandeira;
     private Button btCadastrar;
     private Context context;
+    static final int ACTIVITY_2_REQUEST = 1;
+    private ImageButton imgButton;
     Posto posto;
     private AlertDialog alerta;
+
+
+    ArrayList<Combustivel> dados;
 
     DatabaseReference referenciaFirebase;
     FirebaseAuth autenticacao;
@@ -44,6 +50,15 @@ public class CadastroPostoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_posto);
 
+        // Recupera os parâmetros passados pelo atributo estatico
+         dados = getIntent().getParcelableArrayListExtra("dados");
+
+        if(dados != null) {
+            System.out.println("Array de Combustiveis==> " + dados.size());
+        }else {
+
+            System.out.println("Vazio!!");
+        }
         nome = (EditText) findViewById(R.id.nomePostoId);
         endereco = (EditText) findViewById(R.id.enderecoPostoId);
         bandeira = (TextView) findViewById(R.id.bandeiraPosrtoId);
@@ -68,6 +83,59 @@ public class CadastroPostoActivity extends AppCompatActivity {
                 listaBandeiras();
             }
         });
+
+        imgButton = (ImageButton) findViewById(R.id.imgPrecosId);
+
+        imgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(CadastroPostoActivity.this, CadastrarPrecosCombustivel.class);
+
+                intent.putExtra("nome", nome.getText().toString());
+                intent.putExtra("endereco", endereco.getText().toString());
+                intent.putExtra("bandeira", bandeira.getText().toString());
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String nome = data.getStringExtra("nome");
+        String endereco = data.getStringExtra("endereco");
+        String bandeira = data.getStringExtra("bandeira");
+
+        if (nome != null) {
+            this.nome.setText(nome);
+            this.endereco.setText(endereco);
+            this.bandeira.setText(bandeira);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        CadastrarPrecosCombustivel t= new CadastrarPrecosCombustivel();
+        t.adicionarPrecos();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        String nome = intent.getStringExtra("nome");
+        String endereco = intent.getStringExtra("endereco");
+        String bandeira = intent.getStringExtra("bandeira");
+
+        if (nome != null) {
+            this.nome.setText(nome);
+            this.endereco.setText(endereco);
+            this.bandeira.setText(bandeira);
+        }
     }
 
     protected void cadastrar() throws DAOException {
@@ -81,45 +149,33 @@ public class CadastroPostoActivity extends AppCompatActivity {
             posto.setEndereco(endereco.getText().toString());
             posto.setBandeira(bandeira.getText().toString());
 
-            List<Combustivel> combustivels = new ArrayList<>();
-            Combustivel combustivel = new Combustivel();
-            Combustivel combustivel2 = new Combustivel();
-            Combustivel combustivel3 = new Combustivel();
-            Combustivel combustivel4 = new Combustivel();
-            Combustivel combustivel5 = new Combustivel();
 
-            CombustivelDAO combustivelDAO = new CombustivelDAO(this);
-            combustivel.setTipo("Gasolina");
-            combustivel.setPreco(3.90);
-            combustivelDAO.insert(combustivel);
 
-            combustivel2.setTipo("Gas. aditivada");
-            combustivel2.setPreco(4.10);
-            combustivelDAO.insert(combustivel);
 
-            combustivel3.setTipo("Etanol");
-            combustivel3.setPreco(3.20);
-            combustivelDAO.insert(combustivel);
 
-            combustivel4.setTipo("Diesel");
-            combustivel4.setPreco(3.10);
-            combustivelDAO.insert(combustivel);
+            FirebaseAuth firebaseAuth = ConfiguracaoFireBase.getFirebaseAutentica();
 
-            combustivel5.setTipo("Diesel S10");
-            combustivel5.setPreco(3.60);
-            combustivelDAO.insert(combustivel);
+            DatabaseReference referenciaFirebase = ConfiguracaoFireBase.getFirebase();
 
-           // posto.setCombustivel(combustivels);
+//Array de combustiveis
+            ArrayList<Combustivel> combustivelList = new ArrayList<>();
+
+
+//Setando a lista no posto
+            posto.setCombustivel(dados);
+
+
+            referenciaFirebase.child("postos").push().setValue(posto);
 
 
 
 
 
-            posto.salvar();
 
-            PostoDAO postoDAO = new PostoDAO(this);
-            postoDAO.insert(posto);
-            Util.exibirmensagem(this, "Dados salvos com sucesso!");
+
+         //   posto.salvar();
+
+
 
             //Limpar campos
             nome.setText("");

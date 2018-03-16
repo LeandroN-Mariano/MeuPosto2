@@ -65,5 +65,12 @@
     <string name="pre_os">Preços</string>
     <string name="nomePos">Nome</string>
     <string name="postos_cadastradoss">Postos cadastrados</string>
+    <string name="insira_os_pre_os_dos_combust_veis">Insira os preços dos combustíveis</string>
+    <string name="adicionar">Adicionar</string>
+    <string name="deisel_s10">Deisel S10</string>
+    <string name="diesel">Diesel</string>
+    <string name="etanol">Etanol</string>
+    <string name="gasolina_aditivada">Gasolina Aditivada</string>
+    <string name="gasolina">Gasolina</string>
 
 </resources>

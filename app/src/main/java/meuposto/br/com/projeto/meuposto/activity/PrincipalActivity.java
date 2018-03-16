@@ -50,22 +50,7 @@ public class PrincipalActivity extends AppCompatActivity
         fragmentManager = getSupportFragmentManager();
 
 
-        posto = new Posto();
-        List<Combustivel>combustivels = new ArrayList<Combustivel>();
-        Combustivel combustivel = new Combustivel();
-        combustivel.setTipo("Gasolina");
-        combustivel.setPreco(3.90);
-        Combustivel combustivel2 = new Combustivel();
-        combustivel.setTipo("Gasolina aditivada");
-        combustivel.setPreco(4.10);
 
-        combustivels.add(combustivel);
-        combustivels.add(combustivel2);
-
-        posto.setCombustivel(combustivels);
-
-        System.out.println("Tipo da gasolina: "+ combustivels.get(0).getTipo());
-        System.out.println("Preço: "+ combustivels.get(0).getPreco());
     }
 
     @Override

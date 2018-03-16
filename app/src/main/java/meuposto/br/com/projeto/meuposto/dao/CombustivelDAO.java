@@ -63,9 +63,6 @@ System.out.println("Inserindo o combustivel");
                 System.out.println(cursor.getLong(1));
                 System.out.println("-----------");
 
-                combustivel.setId(cursor.getInt(cursor.getColumnIndex("id")));
-                combustivel.setTipo(cursor.getString(cursor.getColumnIndex("tipo")));
-                combustivel.setPreco(cursor.getDouble(cursor.getColumnIndex("preco")));
 
             }
         } catch (Exception e) {
@@ -98,10 +95,9 @@ System.out.println("Inserindo o combustivel");
                 System.out.println(cursor.getLong(1));
                 System.out.println("-----------");
 
-                combustivel.setId(cursor.getInt(cursor.getColumnIndex("id")));
+
                 combustivel.setTipo(cursor.getString(cursor.getColumnIndex("tipo")));
-                combustivel.setPreco(cursor.getDouble(cursor.getColumnIndex("preco")));
-                combustivelList.add(combustivel);
+
             }
         } catch (Exception e) {
             e.printStackTrace();

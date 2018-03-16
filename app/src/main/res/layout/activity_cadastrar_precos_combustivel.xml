@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="meuposto.br.com.projeto.meuposto.activity.CadastrarPrecosCombustivel">
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/insira_os_pre_os_dos_combust_veis"
+        android:textColor="@android:color/background_dark"
+        android:textSize="22sp"
+        android:visibility="visible"
+        tools:layout_constraintTop_creator="1"
+        android:layout_marginTop="16dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="13dp" />
+
+    <EditText
+        android:id="@+id/precoGasolina"
+        android:hint="@string/gasolina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="22dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView13"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <EditText
+        android:id="@+id/gasolinaAdtId"
+        android:hint="@string/gasolina_aditivada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/precoGasolina"
+        android:layout_marginTop="27dp"
+        app:layout_constraintTop_toBottomOf="@+id/precoGasolina"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/precoGasolina" />
+
+    <EditText
+        android:id="@+id/etanolId"
+        android:hint="@string/etanol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/gasolinaAdtId"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/gasolinaAdtId"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/gasolinaAdtId" />
+
+    <EditText
+        android:id="@+id/diesel"
+        android:hint="@string/diesel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/etanolId"
+        android:layout_marginTop="34dp"
+        app:layout_constraintTop_toBottomOf="@+id/etanolId"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/etanolId" />
+
+    <EditText
+        android:id="@+id/dieselS10Id"
+        android:hint="@string/deisel_s10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+
+        android:inputType="numberDecimal"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/diesel"
+        android:layout_marginTop="35dp"
+        app:layout_constraintTop_toBottomOf="@+id/diesel"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/diesel" />
+
+    <Button
+        android:id="@+id/btAdicionarPrecos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="@string/adicionar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dieselS10Id"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
+</android.support.constraint.ConstraintLayout>

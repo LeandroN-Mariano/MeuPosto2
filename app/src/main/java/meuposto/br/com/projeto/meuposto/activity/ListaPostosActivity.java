@@ -166,7 +166,7 @@ public class ListaPostosActivity extends AppCompatActivity {
                 for ( DataSnapshot dados: dataSnapshot.getChildren() ){
                     Posto posto = dados.getValue( Posto.class );
                     postos.add( posto.getNome() );
-                    Log.i("Nome posto: ",posto.getNome());
+                    Log.i("Tipo Combustivel: ",""+posto.getCombustivel().get(0).getTipo());
                     System.out.println("Posoro===> :"+ posto.getNome());
                 }
 
