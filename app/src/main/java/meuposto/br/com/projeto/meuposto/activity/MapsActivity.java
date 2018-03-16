@@ -8,15 +8,18 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -45,12 +48,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker currentLocationMaker;
     private LatLng currentLocationLatLong;
     private DatabaseReference mDatabase;
+    private double latitude = 0.0;
+    private double longitude = 0.0;
 
+    private TextView texto;
+    private MapView view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        texto = (TextView) findViewById(R.id.nomePostoId);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -59,7 +69,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mDatabase = FirebaseDatabase.getInstance().getReference();
         getMarkers();
 
+
+
+
     }
+
+    private void cadastrarPosto(LatLng latLng) {
+
+        Intent returnIntent = new Intent(MapsActivity.this,CadastrarPrecosCombustivel.class);
+
+
+        double latidude = latLng.latitude;
+        double logitude = latLng.longitude;
+
+        returnIntent.putExtra("latidude",  latidude);
+        returnIntent.putExtra("longitude",  logitude);
+
+
+        startActivity(returnIntent);
+
+        finish();
+
+    }
+
 
 
     /**
@@ -83,15 +115,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+
+                //Vai perguntar se o usuario deseja cadastrar o posto, quando recerber um clique longo na tela
+                      cadastrarPosto(latLng);
+            }
+        });
     }
 
     @Override
     public void onLocationChanged(Location location) {
 
+        //Se a localizacao atual
+        //
         if (currentLocationMaker != null) {
             currentLocationMaker.remove();
         }
         //Add marker
+      /*
         currentLocationLatLong = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(currentLocationLatLong);
@@ -108,6 +152,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
         getMarkers();
+*/
+
 
     }
 
@@ -285,4 +331,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onProviderDisabled(String provider) {
 
     }
+
+
 }

@@ -15,9 +15,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import meuposto.br.com.projeto.meuposto.Control.DAOException;
@@ -37,9 +39,14 @@ public class CadastroPostoActivity extends AppCompatActivity {
     private Context context;
     static final int ACTIVITY_2_REQUEST = 1;
     private ImageButton imgButton;
+    private ImageButton imgButtonLocalizar;
     Posto posto;
     private AlertDialog alerta;
 
+
+
+    private double latitude ;
+    private double longitude;
 
     ArrayList<Combustivel> dados;
 
@@ -49,6 +56,20 @@ public class CadastroPostoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_posto);
+
+
+
+
+
+        carregarDadosMApsActivity();
+
+
+       /*
+        String nome = intent.getStringExtra("nome");
+        String endereco = intent.getStringExtra("endereco");
+        String bandeira = intent.getStringExtra("bandeira");
+*/
+
 
         // Recupera os parâmetros passados pelo atributo estatico
          dados = getIntent().getParcelableArrayListExtra("dados");
@@ -62,6 +83,8 @@ public class CadastroPostoActivity extends AppCompatActivity {
         nome = (EditText) findViewById(R.id.nomePostoId);
         endereco = (EditText) findViewById(R.id.enderecoPostoId);
         bandeira = (TextView) findViewById(R.id.bandeiraPosrtoId);
+        imgButtonLocalizar = (ImageButton) findViewById(R.id.igmMapId);
+
 
         btCadastrar = (Button) findViewById(R.id.botaoCadastrarPostoId);
 
@@ -76,6 +99,8 @@ public class CadastroPostoActivity extends AppCompatActivity {
 
             }
         });
+
+
 
         bandeira.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,30 +124,22 @@ public class CadastroPostoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        String nome = data.getStringExtra("nome");
-        String endereco = data.getStringExtra("endereco");
-        String bandeira = data.getStringExtra("bandeira");
 
-        if (nome != null) {
-            this.nome.setText(nome);
-            this.endereco.setText(endereco);
-            this.bandeira.setText(bandeira);
+    public void converterStringLat(String latLng){
+
+        if(latLng != null) {
+
+            System.out.println("LatString==> "+ latLng);
+            String[] latlong = latLng.split(",");
+
+            latitude = Double.parseDouble(latlong[0]);
+            longitude = Double.parseDouble(latlong[1]);
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        CadastrarPrecosCombustivel t= new CadastrarPrecosCombustivel();
-        t.adicionarPrecos();
-    }
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -136,7 +153,11 @@ public class CadastroPostoActivity extends AppCompatActivity {
             this.endereco.setText(endereco);
             this.bandeira.setText(bandeira);
         }
+
     }
+
+
+
 
     protected void cadastrar() throws DAOException {
 
@@ -161,6 +182,8 @@ public class CadastroPostoActivity extends AppCompatActivity {
             ArrayList<Combustivel> combustivelList = new ArrayList<>();
 
 
+            posto.setLatidude(latitude);
+            posto.setLongidude(longitude);
 //Setando a lista no posto
             posto.setCombustivel(dados);
 
@@ -234,5 +257,16 @@ public class CadastroPostoActivity extends AppCompatActivity {
 
         alerta = builder.create();
         alerta.show();
+    }
+
+    public void carregarDadosMApsActivity() {
+
+
+        Intent intent = getIntent();
+    if(intent.getSerializableExtra("latidude") != null) {
+        latitude = (double) intent.getSerializableExtra("latidude");
+        longitude = (double) intent.getSerializableExtra("longitude");
+    }
+
     }
 }

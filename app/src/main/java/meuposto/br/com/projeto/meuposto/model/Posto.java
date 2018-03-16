@@ -1,5 +1,6 @@
 package meuposto.br.com.projeto.meuposto.model;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
@@ -22,14 +23,15 @@ public class Posto {
     private String bandeira;
     private ArrayList<Combustivel> combustivel;
 
-    private String latidude;
-    private String longidude;
+    private LatLng latLng;
+    private double latidude;
+    private double longidude;
 
 
     public Posto() {
     }
 
-    public Posto(String id, String nome, String endereco, String bandeira, ArrayList<Combustivel> combustivel, String latidude, String longidude) {
+    public Posto(String id, String nome, String endereco, String bandeira, ArrayList<Combustivel> combustivel, double latidude, double longidude) {
         this.id = id;
         this.nome = nome;
         this.endereco = endereco;
@@ -45,6 +47,15 @@ public class Posto {
         DatabaseReference referenciaFirebase = ConfiguracaoFireBase.getFirebase();
         referenciaFirebase.child("postos").child(firebaseAuth.getCurrentUser().getUid()).setValue(this);
     }
+
+    public LatLng getLatLng() {
+        return latLng;
+    }
+
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -87,19 +98,19 @@ public class Posto {
 
 
 
-    public String getLatidude() {
+    public double getLatidude() {
         return latidude;
     }
 
-    public void setLatidude(String latidude) {
+    public void setLatidude(double latidude) {
         this.latidude = latidude;
     }
 
-    public String getLongidude() {
+    public double getLongidude() {
         return longidude;
     }
 
-    public void setLongidude(String longidude) {
+    public void setLongidude(double longidude) {
         this.longidude = longidude;
     }
 }

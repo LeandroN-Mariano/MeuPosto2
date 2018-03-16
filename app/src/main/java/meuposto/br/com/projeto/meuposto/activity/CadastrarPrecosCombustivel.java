@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 import meuposto.br.com.projeto.meuposto.R;
@@ -21,7 +23,8 @@ public class CadastrarPrecosCombustivel extends AppCompatActivity {
     private EditText diesel;
     private EditText dieselS10;
     private Button adicionar;
-
+    private double latitude ;
+    private double longitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,7 @@ public class CadastrarPrecosCombustivel extends AppCompatActivity {
         dieselS10 = (EditText)findViewById(R.id.dieselS10Id);
         adicionar = (Button)findViewById(R.id.btAdicionarPrecos);
 
+        carregarDadosMApsActivity();
         adicionar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,11 +48,23 @@ public class CadastrarPrecosCombustivel extends AppCompatActivity {
                 Intent returnIntent = new Intent(CadastrarPrecosCombustivel.this,CadastroPostoActivity.class);
                // Seta num campo estático da ActivityB
                 returnIntent.putParcelableArrayListExtra("dados", (ArrayList<? extends Parcelable>) dados);
-               // startActivityForResult(returnIntent,1);
+
+
+
+                returnIntent.putExtra("latidude",  latitude);
+                returnIntent.putExtra("longitude",  longitude);
+
+
+
+                startActivityForResult(returnIntent,1);
+
                 finish();
+
+
             }
         });
     }
+
 
     public ArrayList<Combustivel> adicionarPrecos(){
 
@@ -66,5 +82,39 @@ public class CadastrarPrecosCombustivel extends AppCompatActivity {
         combustivels.add(diselS10);
 
         return combustivels;
+    }
+
+
+    //Após digitar os preços, chamar a tela principal de cadastro
+    private void cadastrarPosto(LatLng latLng) {
+
+        Intent returnIntent = new Intent(CadastrarPrecosCombustivel.this,CadastroPostoActivity.class);
+
+        Bundle params = new Bundle();
+
+        // Seta num campo estático da ActivityB
+
+
+        double latidude = latLng.latitude;
+        double logitude = latLng.longitude;
+
+        returnIntent.putExtra("latidude",  latidude);
+        returnIntent.putExtra("longitude",  logitude);
+
+        //  returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(returnIntent);
+
+    }
+
+
+    public void carregarDadosMApsActivity() {
+
+
+        Intent intent = getIntent();
+        if(intent.getSerializableExtra("latidude") != null) {
+            latitude = (double) intent.getSerializableExtra("latidude");
+            longitude = (double) intent.getSerializableExtra("longitude");
+        }
+
     }
 }

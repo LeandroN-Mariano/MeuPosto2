@@ -41,6 +41,7 @@ public class ListaPostosActivity extends AppCompatActivity {
     //Teste Lista
     private  ListView lisViewPosto;;
     private ArrayList<String> postos;
+    private ArrayList<String> precos;
     private ArrayAdapter adapter;
 
     private ValueEventListener valueEventListenerMensagem;
@@ -166,7 +167,8 @@ public class ListaPostosActivity extends AppCompatActivity {
                 for ( DataSnapshot dados: dataSnapshot.getChildren() ){
                     Posto posto = dados.getValue( Posto.class );
                     postos.add( posto.getNome() );
-                    Log.i("Tipo Combustivel: ",""+posto.getCombustivel().get(0).getTipo());
+
+                 //   Log.i("Tipo Combustivel: ",""+posto.getCombustivel().get(0).getTipo());
                     System.out.println("Posoro===> :"+ posto.getNome());
                 }
 
