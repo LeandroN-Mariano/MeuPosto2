@@ -330,8 +330,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title(posto.getNome());
+        markerOptions.title(posto.getNome() +", Gasolina: "+ posto.getCombustivel().get(0).getPreco() +"R$");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
         mMap.addMarker(markerOptions);
     }
 
