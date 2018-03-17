@@ -8,7 +8,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
-import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -40,6 +39,8 @@ import java.util.Map;
 
 import meuposto.br.com.projeto.meuposto.LocationData;
 import meuposto.br.com.projeto.meuposto.R;
+import meuposto.br.com.projeto.meuposto.config.ConfiguracaoFireBase;
+import meuposto.br.com.projeto.meuposto.model.Posto;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener{
 
@@ -53,7 +54,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private TextView texto;
     private MapView view;
-
+    private ValueEventListener valueEventListenerMensagem;
+    DatabaseReference firebase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,15 +68,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         startGettingLocations();
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        getMarkers();
+      getMarkers();
 
 
 
 
     }
 
-    private void cadastrarPosto(LatLng latLng) {
+    private void cadastrarPrecosCombustiveis(LatLng latLng) {
 
         Intent returnIntent = new Intent(MapsActivity.this,CadastrarPrecosCombustivel.class);
 
@@ -88,7 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         startActivity(returnIntent);
 
-        finish();
+
 
     }
 
@@ -107,21 +110,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+
         // Add a marker in Sydney and move the camera
-        LatLng serra = new LatLng(-7.988955, -38.291601);
-        mMap.addMarker(new MarkerOptions().position(serra).title("Marcador em Serra talhada"));
-
-        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(serra).build();
 
 
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+   //     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
 
                 //Vai perguntar se o usuario deseja cadastrar o posto, quando recerber um clique longo na tela
-                      cadastrarPosto(latLng);
+                      cadastrarPrecosCombustiveis(latLng);
             }
         });
     }
@@ -129,30 +134,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
 
-        //Se a localizacao atual
-        //
-        if (currentLocationMaker != null) {
-            currentLocationMaker.remove();
-        }
-        //Add marker
-      /*
+        //Se a localizacao atual//Add marker
+
         currentLocationLatLong = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(currentLocationLatLong);
-        markerOptions.title("Localização atual");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-        currentLocationMaker = mMap.addMarker(markerOptions);
+
 
         //==>> Move to new location
         CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(currentLocationLatLong).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         LocationData locationData = new LocationData(location.getLatitude(), location.getLongitude());
-        mDatabase.child("location").child(String.valueOf(new Date().getTime())).setValue(locationData);
 
-        Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
+
         getMarkers();
-*/
+
 
 
     }
@@ -274,13 +269,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void getMarkers(){
 
-        mDatabase.child("location").addListenerForSingleValueEvent(
+        String key = mDatabase.child("postos").getKey();
+
+        System.out.println("Key posto==>> " + key);
+
+        mDatabase.child("postos").addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         //Get map of users in datasnapshot
-                        if (dataSnapshot.getValue() != null)
-                            getAllLocations((Map<String,Object>) dataSnapshot.getValue());
+
+                        System.out.println("DataSnap: "+dataSnapshot.getValue());
+                        if (dataSnapshot.getValue() != null) {
+
+                            for ( DataSnapshot dados: dataSnapshot.getChildren() ){
+                                Posto posto = dados.getValue( Posto.class );
+
+
+                                //   Log.i("Tipo Combustivel: ",""+posto.getCombustivel().get(0).getTipo());
+                                System.out.println("Posoro===> :"+ posto.getLocationData().getLatitude());
+
+                                addMarcador(posto, posto.getLocationData().getLatitude(),posto.getLocationData().getLongitude());
+                            }
+
+
+
+                          //  getAllLocations((Map<String, Object>) dataSnapshot.getValue());
+                        }
                     }
 
                     @Override
@@ -307,6 +322,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    private void addMarcador(Posto posto, double latitude, double longitude) {
+
+        LatLng latLng = new LatLng(latitude, longitude);
+
+
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title(posto.getNome());
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        mMap.addMarker(markerOptions);
+    }
+
     private void addGreenMarker(Date newDate, LatLng latLng) {
         SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         MarkerOptions markerOptions = new MarkerOptions();
@@ -315,7 +343,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
         mMap.addMarker(markerOptions);
     }
-
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -332,5 +359,82 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    public void carregasPostos(){
 
+
+        // Recuperar Postos do Firebase
+        firebase = ConfiguracaoFireBase.getFirebase()
+                .child("postos");
+
+        valueEventListenerMensagem = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                for ( DataSnapshot dados: dataSnapshot.getChildren() ){
+                    LocationData posto = dados.getValue( LocationData.class );
+                   System.out.println("Nome do Posto=> "+ posto.getLatitude());
+
+
+                    double latitude = (Double) dados.child("latitude").getValue();
+                    double longitude = (Double)dados.child("longitude").getValue();
+
+
+                    adicionarMarker("Teste", latitude, longitude);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        firebase.addValueEventListener( valueEventListenerMensagem );
+    }
+
+
+    private void adicionarMarker(String nome, double latitude, double longitude) {
+
+        LatLng latLng = new LatLng(latitude, longitude);
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title(nome);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        mMap.addMarker(markerOptions);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getMarkers();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        getMarkers();
+    }
+
+    public void adiconarMarcador(){
+
+        currentLocationLatLong = new LatLng(this.latitude, this.longitude);
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(currentLocationLatLong);
+        markerOptions.title("Posto salvo");
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        currentLocationMaker = mMap.addMarker(markerOptions);
+
+        //==>> Move to new location
+        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(currentLocationLatLong).build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        LocationData locationData = new LocationData(this.latitude, this.latitude);
+        mDatabase.child("location").child(String.valueOf(new Date().getTime())).setValue(locationData);
+
+        Toast.makeText(this, "Posto salvo", Toast.LENGTH_SHORT).show();
+        getMarkers();
+
+    }
 }

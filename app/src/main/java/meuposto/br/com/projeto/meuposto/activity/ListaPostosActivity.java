@@ -151,11 +151,11 @@ public class ListaPostosActivity extends AppCompatActivity {
         lisViewPosto.setAdapter(adapter);
 
 
-        // Recuperar mensagens do Firebase
+        // Recuperar postos do Firebase
         firebase = ConfiguracaoFireBase.getFirebase()
                 .child("postos");
 
-        // Cria listener para mensagens
+        // Cria listener para postos
         valueEventListenerMensagem = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

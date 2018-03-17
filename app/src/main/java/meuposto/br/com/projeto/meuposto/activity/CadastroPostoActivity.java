@@ -3,6 +3,8 @@ package meuposto.br.com.projeto.meuposto.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,10 +21,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import meuposto.br.com.projeto.meuposto.Control.DAOException;
+import meuposto.br.com.projeto.meuposto.LocationData;
 import meuposto.br.com.projeto.meuposto.R;
 import meuposto.br.com.projeto.meuposto.config.ConfiguracaoFireBase;
 import meuposto.br.com.projeto.meuposto.dao.CombustivelDAO;
@@ -44,6 +49,7 @@ public class CadastroPostoActivity extends AppCompatActivity {
     private AlertDialog alerta;
 
 
+    LocationData locationData;
 
     private double latitude ;
     private double longitude;
@@ -129,17 +135,6 @@ public class CadastroPostoActivity extends AppCompatActivity {
     }
 
 
-    public void converterStringLat(String latLng){
-
-        if(latLng != null) {
-
-            System.out.println("LatString==> "+ latLng);
-            String[] latlong = latLng.split(",");
-
-            latitude = Double.parseDouble(latlong[0]);
-            longitude = Double.parseDouble(latlong[1]);
-        }
-    }
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -182,8 +177,11 @@ public class CadastroPostoActivity extends AppCompatActivity {
             ArrayList<Combustivel> combustivelList = new ArrayList<>();
 
 
-            posto.setLatidude(latitude);
-            posto.setLongidude(longitude);
+            locationData = new LocationData(latitude,longitude);
+
+            posto.setLocationData(locationData);
+
+
 //Setando a lista no posto
             posto.setCombustivel(dados);
 
@@ -204,7 +202,7 @@ public class CadastroPostoActivity extends AppCompatActivity {
             nome.setText("");
             endereco.setText("");
             bandeira.setText("");
-
+    finish();
             //Mostrar uma mensagem perguntando se o usuario deseja cadastrar precos do posto
 
         }
@@ -269,4 +267,22 @@ public class CadastroPostoActivity extends AppCompatActivity {
     }
 
     }
+
+
+        public Address buscarEndereco() throws IOException {
+
+            Geocoder geocoder;
+            Address address = null;
+            List<Address> addresses;
+
+            geocoder = new Geocoder(getApplicationContext());
+
+            addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+            if(addresses.size() > 0){
+
+                address = addresses.get(0);
+            }
+             return address;
+        }
 }

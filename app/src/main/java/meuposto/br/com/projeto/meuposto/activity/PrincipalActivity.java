@@ -105,14 +105,7 @@ public class PrincipalActivity extends AppCompatActivity
             startActivity(intent);
         }
 
-        if (id == R.id.novoPostoId) {
 
-
-    Intent intent = new Intent(this, CadastroPostoActivity.class);
-    startActivity(intent);
-
-
-        }
 
         if (id == R.id.listaDePostosID) {
 

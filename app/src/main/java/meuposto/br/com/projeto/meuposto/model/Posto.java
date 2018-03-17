@@ -24,21 +24,19 @@ public class Posto {
     private ArrayList<Combustivel> combustivel;
 
     private LatLng latLng;
-    private double latidude;
-    private double longidude;
 
+    private LocationData locationData;
 
     public Posto() {
     }
 
-    public Posto(String id, String nome, String endereco, String bandeira, ArrayList<Combustivel> combustivel, double latidude, double longidude) {
+    public Posto(String id, String nome, String endereco, String bandeira, ArrayList<Combustivel> combustivel) {
         this.id = id;
         this.nome = nome;
         this.endereco = endereco;
         this.bandeira = bandeira;
         this.combustivel = combustivel;
-        this.latidude = latidude;
-        this.longidude = longidude;
+
     }
 
     public void salvar(){
@@ -46,6 +44,14 @@ public class Posto {
         FirebaseAuth firebaseAuth = ConfiguracaoFireBase.getFirebaseAutentica();
         DatabaseReference referenciaFirebase = ConfiguracaoFireBase.getFirebase();
         referenciaFirebase.child("postos").child(firebaseAuth.getCurrentUser().getUid()).setValue(this);
+    }
+
+    public LocationData getLocationData() {
+        return locationData;
+    }
+
+    public void setLocationData(LocationData locationData) {
+        this.locationData = locationData;
     }
 
     public LatLng getLatLng() {
@@ -98,19 +104,5 @@ public class Posto {
 
 
 
-    public double getLatidude() {
-        return latidude;
-    }
 
-    public void setLatidude(double latidude) {
-        this.latidude = latidude;
-    }
-
-    public double getLongidude() {
-        return longidude;
-    }
-
-    public void setLongidude(double longidude) {
-        this.longidude = longidude;
-    }
 }
